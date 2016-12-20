@@ -1,0 +1,18 @@
+    version: '2'
+    services:
+      master:
+        build: .
+        hostname: master
+        expose:
+        - "8080"
+        ports:
+        - "8080:8080"
+#        ports:
+#          - "8080:8080"
+#      slave:
+#        build: .
+#        hostname: spark-slave
+#        command: bash -c '/usr/local/spark/sbin/start-slave.sh spark://master:7077';'bash'
+#        depends_on:
+#          - master
+
