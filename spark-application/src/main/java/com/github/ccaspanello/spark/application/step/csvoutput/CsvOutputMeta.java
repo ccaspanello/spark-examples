@@ -1,8 +1,10 @@
-package com.github.ccaspanello.reactive.spark.application.step.csvoutput;
+package com.github.ccaspanello.spark.application.step.csvoutput;
 
-import com.github.ccaspanello.reactive.spark.application.step.BaseStepMeta;
+import com.github.ccaspanello.spark.application.step.BaseStepMeta;
 
 /**
+ * CSV Output Step Meta Model
+ *
  * Created by ccaspanello on 12/19/2016.
  */
 public class CsvOutputMeta extends BaseStepMeta {
@@ -13,6 +15,7 @@ public class CsvOutputMeta extends BaseStepMeta {
         super(name);
     }
 
+    //<editor-fold desc="Getters & Setters">
     public String getFilename() {
         return filename;
     }
@@ -20,4 +23,5 @@ public class CsvOutputMeta extends BaseStepMeta {
     public void setFilename(String filename) {
         this.filename = filename;
     }
+    //</editor-fold>
 }

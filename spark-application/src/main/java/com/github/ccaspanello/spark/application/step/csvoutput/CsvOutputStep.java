@@ -1,8 +1,10 @@
-package com.github.ccaspanello.reactive.spark.application.step.csvoutput;
+package com.github.ccaspanello.spark.application.step.csvoutput;
 
-import com.github.ccaspanello.reactive.spark.application.step.BaseStep;
+import com.github.ccaspanello.spark.application.step.BaseStep;
 
 /**
+ * CSV Output Step Logic
+ *
  * Created by ccaspanello on 12/19/2016.
  */
 public class CsvOutputStep extends BaseStep<CsvOutputMeta> {

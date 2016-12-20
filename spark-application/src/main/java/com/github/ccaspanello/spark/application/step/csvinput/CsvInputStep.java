@@ -1,12 +1,14 @@
-package com.github.ccaspanello.reactive.spark.application.step.csvinput;
+package com.github.ccaspanello.spark.application.step.csvinput;
 
-import com.github.ccaspanello.reactive.spark.application.step.BaseStep;
+import com.github.ccaspanello.spark.application.step.BaseStep;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * CSV Input Step Logic
+ *
  * Created by ccaspanello on 12/19/2016.
  */
 public class CsvInputStep extends BaseStep<CsvInputMeta> {

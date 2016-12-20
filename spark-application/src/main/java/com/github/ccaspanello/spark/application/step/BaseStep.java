@@ -1,6 +1,5 @@
-package com.github.ccaspanello.reactive.spark.application.step;
+package com.github.ccaspanello.spark.application.step;
 
-import com.github.ccaspanello.reactive.spark.application.step.csvinput.CsvInputMeta;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -22,6 +21,7 @@ public abstract class BaseStep<E extends IStepMeta> implements IStep {
         this.meta = meta;
     }
 
+    //<editor-fold desc="Getters & Setters">
     public SparkSession getSparkSession() {
         return sparkSession;
     }
@@ -60,4 +60,5 @@ public abstract class BaseStep<E extends IStepMeta> implements IStep {
     public void setData(Dataset<Row> data) {
         this.data = data;
     }
+    //</editor-fold>
 }

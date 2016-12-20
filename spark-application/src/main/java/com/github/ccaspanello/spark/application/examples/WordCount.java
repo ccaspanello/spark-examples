@@ -1,6 +1,6 @@
-package com.github.ccaspanello.reactive.spark.application.examples;
+package com.github.ccaspanello.spark.application.examples;
 
-import com.github.ccaspanello.reactive.spark.application.io.IOHandler;
+import com.github.ccaspanello.spark.application.io.IOHandler;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -13,6 +13,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 /**
+ * Word Count Example from Apache Documents
+ *
  * Created by ccaspanello on 12/15/2016.
  */
 public class WordCount implements Serializable {

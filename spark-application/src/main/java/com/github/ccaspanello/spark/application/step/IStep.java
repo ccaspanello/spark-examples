@@ -1,4 +1,4 @@
-package com.github.ccaspanello.reactive.spark.application.step;
+package com.github.ccaspanello.spark.application.step;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -8,15 +8,21 @@ import java.io.Serializable;
 import java.util.Set;
 
 /**
+ * Step Interface
+ *
  * Created by ccaspanello on 12/19/2016.
  */
 public interface IStep extends Serializable {
 
+    /**
+     * Executes Step Logic
+     */
+    void execute();
+
+    //<editor-fold desc="Getters & Setters">
     void setSparkSession(SparkSession spark);
 
     SparkSession getSparkSession();
-
-    void execute();
 
     IStepMeta getStepMeta();
 
@@ -25,4 +31,5 @@ public interface IStep extends Serializable {
     void setOutgoing(Set<IStep> outgoing);
 
     Dataset<Row> getData();
+    //</editor-fold>
 }

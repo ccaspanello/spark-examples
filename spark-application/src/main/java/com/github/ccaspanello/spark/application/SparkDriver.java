@@ -1,14 +1,18 @@
-package com.github.ccaspanello.reactive.spark.application;
+package com.github.ccaspanello.spark.application;
 
-import com.github.ccaspanello.reactive.spark.application.examples.CsvMergeExample;
-import com.github.ccaspanello.reactive.spark.application.examples.SparkPi;
-import com.github.ccaspanello.reactive.spark.application.examples.TransformationExample;
-import com.github.ccaspanello.reactive.spark.application.examples.WordCount;
+import com.github.ccaspanello.spark.application.examples.CsvMergeExample;
+import com.github.ccaspanello.spark.application.examples.SparkPi;
+import com.github.ccaspanello.spark.application.examples.TransformationExample;
+import com.github.ccaspanello.spark.application.examples.WordCount;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.SparkSession;
 
 
 /**
+ * Entry Point for Spark Job
+ *
+ * First parameter is the example ID followed by parameters unique to that job.
+ *
  * Created by ccaspanello on 12/15/2016.
  */
 public class SparkDriver {

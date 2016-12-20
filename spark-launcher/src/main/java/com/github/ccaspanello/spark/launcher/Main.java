@@ -1,11 +1,10 @@
-package com.github.ccaspanello.reactive.spark.launcher;
+package com.github.ccaspanello.spark.launcher;
 
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.spark.launcher.SparkAppHandle;
 import org.apache.spark.launcher.SparkLauncher;
-import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Main Entry Point for Launching Spark Jobs
+ *
  * Created by ccaspanello on 12/8/2016.
  */
 public class Main {
@@ -35,10 +36,14 @@ public class Main {
         String input = "file:/C:/Users/ccaspanello/Desktop/mobydick/input";
         String output = "file:/C:/Users/ccaspanello/Desktop/mobydick/output";
 
+        String csvInputUser = "file:/C:/Users/ccaspanello/Desktop/AEL/InputUser.csv";
+        String csvInputApp = "file:/C:/Users/ccaspanello/Desktop/AEL/InputApp.csv";
+        String csvOutput = "file:/C:/Users/ccaspanello/Desktop/AEL/Output.txt";
+
         try {
             LOG.info("************************* START *************************");
 
-            String driverClass = "com.github.ccaspanello.reactive.spark.application.SparkDriver";
+            String driverClass = "com.github.ccaspanello.spark.application.SparkDriver";
 
             File root = new File(System.getProperty("user.dir"));
             File jar = new File(root, "spark-application/target/spark-application-1.0-SNAPSHOT.jar");
@@ -73,22 +78,14 @@ public class Main {
             //launcher.addAppArgs("SPARKPI", "10");
             //launcher.addAppArgs("WORDCOUNT", input, output);
             //launcher.addAppArgs("WORDCOUNT", hdfsInput, hdfsOutput);
-
-//            String csvInputUser = "file:/C:/Users/ccaspanello/Desktop/AEL/InputUser.csv";
-//            String csvInputApp = "file:/C:/Users/ccaspanello/Desktop/AEL/InputApp.csv";
-//            String csvOutput = "file:/C:/Users/ccaspanello/Desktop/AEL/Output.txt";
-//            launcher.addAppArgs("CSV", csvInputUser, csvInputApp, csvOutput);
-
-            String csvInputUser = "file:/C:/Users/ccaspanello/Desktop/AEL/InputUser.csv";
-            String csvInputApp = "file:/C:/Users/ccaspanello/Desktop/AEL/InputApp.csv";
-            String csvOutput = "file:/C:/Users/ccaspanello/Desktop/AEL/Output.txt";
+            //launcher.addAppArgs("CSV", csvInputUser, csvInputApp, csvOutput);
             launcher.addAppArgs("TRANS", csvInputUser, csvInputApp, csvOutput);
 
             SparkAppHandle sparkHandle = launcher.startApplication();
 
             LOG.info("Job Submitted");
             while (!sparkHandle.getState().isFinal()) {
-//                LOG.info("State:  {}", sparkHandle.getState());
+                //LOG.info("State:  {}", sparkHandle.getState());
                 Thread.sleep(100);
             }
 
@@ -100,6 +97,12 @@ public class Main {
         }
     }
 
+    /**
+     * Creates a custom configuration file.  This contains spark.jars which is a concatinated list of jars required to run
+     * the application.  This is to get around a command line lenght limitation in windows.
+     *
+     * @param lib
+     */
     private static void createConfigFile(File lib) {
         try {
             File confDir = new File(SPARK_CONF_DIR);
@@ -110,8 +113,6 @@ public class Main {
             File conf = new File(confDir, "spark-defaults.conf");
 
             StringBuilder sb = new StringBuilder();
-
-            // Add Concatinated List of Kettle Jars from HDFS
             sb.append("spark.jars   ");
             File[] jars = lib.listFiles();
             for (File jar : jars) {

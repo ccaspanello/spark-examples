@@ -1,6 +1,6 @@
-package com.github.ccaspanello.reactive.spark.application.examples;
+package com.github.ccaspanello.spark.application.examples;
 
-import com.github.ccaspanello.reactive.spark.application.io.IOHandler;
+import com.github.ccaspanello.spark.application.io.IOHandler;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Stand Alone CSV Merge Example
+ *
  * Created by ccaspanello on 12/19/2016.
  */
 public class CsvMergeExample {

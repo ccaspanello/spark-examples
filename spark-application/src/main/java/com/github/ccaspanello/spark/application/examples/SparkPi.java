@@ -1,4 +1,4 @@
-package com.github.ccaspanello.reactive.spark.application.examples;
+package com.github.ccaspanello.spark.application.examples;
 
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Spark Pi Exampe from Apache Documents
+ *
  * Created by ccaspanello on 12/15/2016.
  */
 public class SparkPi implements Serializable  {

@@ -1,8 +1,10 @@
-package com.github.ccaspanello.reactive.spark.application.step.csvinput;
+package com.github.ccaspanello.spark.application.step.csvinput;
 
-import com.github.ccaspanello.reactive.spark.application.step.BaseStepMeta;
+import com.github.ccaspanello.spark.application.step.BaseStepMeta;
 
 /**
+ * CSV Input Step Meta Model
+ *
  * Created by ccaspanello on 12/19/2016.
  */
 public class CsvInputMeta extends BaseStepMeta {
@@ -14,6 +16,7 @@ public class CsvInputMeta extends BaseStepMeta {
         super(name);
     }
 
+    //<editor-fold desc="Getters & Setters">
     public String getFilename() {
         return filename;
     }
@@ -29,4 +32,5 @@ public class CsvInputMeta extends BaseStepMeta {
     public void setHeader(boolean header) {
         this.header = header;
     }
+    //</editor-fold>
 }
