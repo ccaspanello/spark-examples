@@ -1,4 +1,4 @@
-package com.github.ccaspanello.spark.application.step;
+package com.github.ccaspanello.spark.engine.step;
 
 /**
  * Created by ccaspanello on 12/19/2016.

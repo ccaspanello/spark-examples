@@ -1,12 +1,13 @@
 package com.github.ccaspanello.spark.application.examples;
 
-import com.github.ccaspanello.spark.application.io.IOHandler;
+import com.github.ccaspanello.spark.engine.io.IOHandler;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.PairFunction;
+import org.apache.spark.sql.SparkSession;
 import scala.Tuple2;
 
 import java.io.Serializable;
@@ -21,7 +22,9 @@ public class WordCount implements Serializable {
 
     private IOHandler ioHandler;
 
-    public void execute(JavaSparkContext context, String input, String output) {
+    public void execute(SparkSession session, String input, String output) {
+
+        JavaSparkContext context = new JavaSparkContext(session.sparkContext());
 
         ioHandler = new IOHandler(context.hadoopConfiguration());
         ioHandler.deleteFolder(output);

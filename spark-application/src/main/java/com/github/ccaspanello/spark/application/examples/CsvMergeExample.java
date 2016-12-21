@@ -1,6 +1,6 @@
 package com.github.ccaspanello.spark.application.examples;
 
-import com.github.ccaspanello.spark.application.io.IOHandler;
+import com.github.ccaspanello.spark.engine.io.IOHandler;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;

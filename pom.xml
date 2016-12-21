@@ -17,6 +17,7 @@
     <modules>
         <module>spark-launcher</module>
         <module>spark-application</module>
+        <module>spark-engine</module>
     </modules>
 
     <dependencyManagement>

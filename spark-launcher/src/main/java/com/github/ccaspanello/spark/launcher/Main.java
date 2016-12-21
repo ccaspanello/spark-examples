@@ -38,10 +38,12 @@ public class Main {
 
         String csvInputUser = "file:/C:/Users/ccaspanello/Desktop/AEL/InputUser.csv";
         String csvInputApp = "file:/C:/Users/ccaspanello/Desktop/AEL/InputApp.csv";
-        String csvOutput = "file:/C:/Users/ccaspanello/Desktop/AEL/Output.txt";
+        String csvOutput = "file:/C:/Users/ccaspanello/Desktop/AEL/Output";
 
         try {
             LOG.info("************************* START *************************");
+            File folder = new File(csvOutput);
+            FileUtils.deleteDirectory(folder);
 
             String driverClass = "com.github.ccaspanello.spark.application.SparkDriver";
 
@@ -79,7 +81,9 @@ public class Main {
             //launcher.addAppArgs("WORDCOUNT", input, output);
             //launcher.addAppArgs("WORDCOUNT", hdfsInput, hdfsOutput);
             //launcher.addAppArgs("CSV", csvInputUser, csvInputApp, csvOutput);
-            launcher.addAppArgs("TRANS", csvInputUser, csvInputApp, csvOutput);
+            //launcher.addAppArgs("PROCESS");
+            //launcher.addAppArgs("TRANS", csvInputUser, csvInputApp, csvOutput);
+            launcher.addAppArgs("TRANS2", csvOutput);
 
             SparkAppHandle sparkHandle = launcher.startApplication();
 

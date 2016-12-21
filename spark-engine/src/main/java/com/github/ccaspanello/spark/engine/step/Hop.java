@@ -1,4 +1,4 @@
-package com.github.ccaspanello.spark.application.step;
+package com.github.ccaspanello.spark.engine.step;
 
 import org.jgrapht.graph.DefaultEdge;
 

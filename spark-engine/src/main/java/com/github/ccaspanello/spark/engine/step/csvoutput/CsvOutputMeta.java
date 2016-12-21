@@ -1,6 +1,6 @@
-package com.github.ccaspanello.spark.application.step.csvoutput;
+package com.github.ccaspanello.spark.engine.step.csvoutput;
 
-import com.github.ccaspanello.spark.application.step.BaseStepMeta;
+import com.github.ccaspanello.spark.engine.step.BaseStepMeta;
 
 /**
  * CSV Output Step Meta Model

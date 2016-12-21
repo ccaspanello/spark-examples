@@ -1,6 +1,6 @@
-package com.github.ccaspanello.spark.application.step.lookup;
+package com.github.ccaspanello.spark.engine.step.lookup;
 
-import com.github.ccaspanello.spark.application.step.BaseStepMeta;
+import com.github.ccaspanello.spark.engine.step.BaseStepMeta;
 
 /**
  * Lookup Step Meta Model

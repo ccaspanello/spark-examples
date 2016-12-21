@@ -1,6 +1,6 @@
-package com.github.ccaspanello.spark.application.step.csvinput;
+package com.github.ccaspanello.spark.engine.step.csvinput;
 
-import com.github.ccaspanello.spark.application.step.BaseStep;
+import com.github.ccaspanello.spark.engine.step.BaseStep;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.slf4j.Logger;
@@ -26,8 +26,7 @@ public class CsvInputStep extends BaseStep<CsvInputMeta> {
                 .option("header", true)
                 .option("inferSchema", true)
                 .load(getStepMeta().getFilename());
-        LOG.info("{} - Read: {}", getStepMeta().getName(), result.count());
-
+        LOG.info("ROW COUNT for {}: {}", getStepMeta().getName() ,result.count());
         setData(result);
     }
 }

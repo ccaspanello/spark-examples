@@ -1,4 +1,4 @@
-package com.github.ccaspanello.spark.application.io;
+package com.github.ccaspanello.spark.engine.io;
 
 import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemException;
