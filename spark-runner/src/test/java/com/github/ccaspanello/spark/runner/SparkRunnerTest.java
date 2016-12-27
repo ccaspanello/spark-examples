@@ -22,8 +22,7 @@ public class SparkRunnerTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(SparkRunnerTest.class);
 
-    private static final String SPARK_HOME = "C:/DevTools/spark-2.0.1-bin-hadoop2.7";
-    private static final String CLUSTER_CONFIG = "C:/Users/ccaspanello/Desktop/Cluster Config/svqxbdcn6cdh57spark";
+    //private static final String CLUSTER_CONFIG = "C:/Users/ccaspanello/Desktop/Cluster Config/svqxbdcn6cdh57spark";
 
     private SparkRunner sparkRunner;
     private File jar;
@@ -35,10 +34,10 @@ public class SparkRunnerTest {
     @Before
     public void before() {
         Map<String, String> env = new HashMap<>();
-        env.put(Constants.SPARK_HOME, SPARK_HOME);
-        env.put(Constants.HADOOP_CONF_DIR, CLUSTER_CONFIG);
+        env.put(Constants.SPARK_HOME, System.getenv(Constants.SPARK_HOME));
+        //env.put(Constants.HADOOP_CONF_DIR, CLUSTER_CONFIG);
         env.put(Constants.HADOOP_USER_NAME, "devuser");
-        env.put(Constants.SPARK_CONF_DIR, SPARK_HOME + "/kettleConfig");
+        env.put(Constants.SPARK_CONF_DIR, System.getenv(Constants.SPARK_HOME) + "/kettleConfig");
 
         sparkRunner = new SparkRunner(env);
         File projectRoot = new File(System.getProperty("buildDirectory"));
@@ -72,17 +71,6 @@ public class SparkRunnerTest {
 
         // Cleanup Output Directory
         cleanupLocalOutput(output);
-        SparkAppHandle.State state = sparkRunner.run(jar, "WORDCOUNT", input, output);
-        assertEquals(SparkAppHandle.State.FINISHED, state);
-    }
-
-    @Test
-    @Ignore
-    public void testWordCountHdfs() throws Exception {
-        String input = "hdfs://svqxbdcn6cdh57sparkn1.pentahoqa.com:8020/wordcount/input";
-        String output = "hdfs://svqxbdcn6cdh57sparkn1.pentahoqa.com:8020/wordcount/output";
-
-        // TODO Cleanup Output Directory
         SparkAppHandle.State state = sparkRunner.run(jar, "WORDCOUNT", input, output);
         assertEquals(SparkAppHandle.State.FINISHED, state);
     }
