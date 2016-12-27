@@ -1,6 +1,5 @@
 package com.github.ccaspanello.spark.application.examples;
 
-import com.github.ccaspanello.spark.engine.io.IOHandler;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -22,9 +21,6 @@ public class CsvMergeExample {
         JavaSparkContext context = new JavaSparkContext(sparkSession.sparkContext());
 
         LOG.error("TEST");
-
-        IOHandler ioHandler = new IOHandler(context.hadoopConfiguration());
-        ioHandler.deleteFolder(sOutput);
 
         Dataset<Row> inputUser = sparkSession.read().format("com.databricks.spark.csv").option("header", true).option("inferSchema", true).load(sInputUser);
         LOG.warn("inputUser: {}", inputUser.count());
