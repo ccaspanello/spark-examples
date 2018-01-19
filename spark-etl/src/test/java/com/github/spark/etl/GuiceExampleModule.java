@@ -15,6 +15,7 @@ public class GuiceExampleModule implements Module {
     SparkConf sparkConf = new SparkConf();
     sparkConf.set( "spark.eventLog.enabled", "true" );
     sparkConf.set( "spark.driver.host", "localhost" );
+    sparkConf.set("spark.driver.allowMultipleContexts", "true");
     SparkContext sparkContext = new SparkContext( "local[*]", "SparkTest", sparkConf );
 
     binder.bind( SparkContext.class ).toInstance( sparkContext );
