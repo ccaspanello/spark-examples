@@ -5,24 +5,18 @@ import com.github.spark.etl.engine.BaseStep;
 import com.github.spark.etl.engine.IStep;
 import com.github.spark.etl.engine.Transformation;
 import com.github.spark.etl.engine.rowsfrom.RowsFromResultStep;
-import org.apache.spark.SparkConf;
 import org.apache.spark.SparkContext;
-import org.apache.spark.api.java.function.ForeachFunction;
 import org.apache.spark.api.java.function.MapFunction;
-import org.apache.spark.api.java.function.MapPartitionsFunction;
 import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.catalyst.encoders.ExpressionEncoder;
 import org.apache.spark.sql.catalyst.encoders.RowEncoder;
+import org.apache.spark.sql.types.StructType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.tools.jstat.ExpressionExecuter;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -46,7 +40,6 @@ public class TransExecutorStep extends BaseStep<TransExecutorMeta> {
     if ( bypass ) {
       setData( incomming );
     } else {
-      // TODO Convert passthrough to real logic
       Transformation subTrans = getStepMeta().getTransformation();
       RowsFromResultStep fromResultStep =
         (RowsFromResultStep) subTrans.getGraph().vertexSet().stream().filter( new Predicate<IStep>() {
@@ -59,6 +52,8 @@ public class TransExecutorStep extends BaseStep<TransExecutorMeta> {
       String f1 = fields.get( 0 );
       List<String> fx = fields.subList( 1, fields.size() );
 
+      StructType schema = incomming.schema();
+      ExpressionEncoder<Row> encoder2 = RowEncoder.apply(schema);
 
       Dataset<Row> result = incomming
         .select( f1, fx.toArray( new String[ fx.size() ] ) )
@@ -75,7 +70,7 @@ public class TransExecutorStep extends BaseStep<TransExecutorMeta> {
           subResult.show();
           return subResult.first();
         }
-      }, incomming.exprEnc() );
+      }, encoder2 );
 
       setData( result );
     }
