@@ -12,4 +12,5 @@ public class Main {
     SparkPi sparkPi = new SparkPi(sparkContext );
     sparkPi.run( 10 );
   }
+
 }
