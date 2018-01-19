@@ -12,6 +12,7 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.catalyst.encoders.ExpressionEncoder;
 import org.apache.spark.sql.catalyst.encoders.RowEncoder;
+import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,22 +42,11 @@ public class TransExecutorStep extends BaseStep<TransExecutorMeta> {
       setData( incomming );
     } else {
       Transformation subTrans = getStepMeta().getTransformation();
-      RowsFromResultStep fromResultStep =
-        (RowsFromResultStep) subTrans.getGraph().vertexSet().stream().filter( new Predicate<IStep>() {
-          @Override public boolean test( IStep iStep ) {
-            return ( iStep instanceof RowsFromResultStep );
-          }
-        } ).findFirst().get();
 
-      List<String> fields = fromResultStep.getStepMeta().getIncommingFields();
-      String f1 = fields.get( 0 );
-      List<String> fx = fields.subList( 1, fields.size() );
-
-      StructType schema = incomming.schema();
+      StructType schema = incomming.schema().add("test_id_calc", DataTypes.LongType );
       ExpressionEncoder<Row> encoder2 = RowEncoder.apply(schema);
 
       Dataset<Row> result = incomming
-        .select( f1, fx.toArray( new String[ fx.size() ] ) )
         .map( new MapFunction<Row, Row>() {
         @Override
         public Row call( Row row ) throws Exception {
@@ -71,6 +61,8 @@ public class TransExecutorStep extends BaseStep<TransExecutorMeta> {
           return subResult.first();
         }
       }, encoder2 );
+
+      LOG.info("schema: " + result.schema());
 
       setData( result );
     }

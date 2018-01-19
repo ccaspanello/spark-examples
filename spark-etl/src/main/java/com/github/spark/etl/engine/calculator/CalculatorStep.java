@@ -33,7 +33,6 @@ public class CalculatorStep extends BaseStep<CalculatorMeta> {
   private void addFunction( Dataset<Row> incomming ) {
     String colName = getStepMeta().getColumnName();
     String expression = getStepMeta().getFieldA() + "+" + getStepMeta().getFieldB();
-    LOG.info("***** ***** ***** ***** ***** Calc: {}", expression);
     Dataset<Row> result = incomming.withColumn( colName, org.apache.spark.sql.functions.expr( expression ) );
     setData( result );
   }
