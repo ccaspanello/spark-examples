@@ -9,9 +9,9 @@ import com.github.spark.etl.engine.BaseStepMeta;
  */
 public class LookupMeta extends BaseStepMeta {
 
-    public String leftStep;
-    public String rightStep;
-    public String field;
+    private String leftStep;
+    private String rightStep;
+    private String field;
 
     //<editor-fold desc="Getters & Setters">
     public LookupMeta(String name) {

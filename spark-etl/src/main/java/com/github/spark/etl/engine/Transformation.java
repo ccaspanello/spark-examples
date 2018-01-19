@@ -5,15 +5,21 @@ import org.jgrapht.graph.DefaultDirectedGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Set;
 
-public class Transformation {
+public class Transformation implements Serializable {
 
   private static final Logger LOG = LoggerFactory.getLogger( Transformation.class );
 
-  private DirectedGraph<IStep, Hop> graph;
+  private final String name;
+  private final DirectedGraph<IStep, Hop> graph;
 
-  public Transformation() {
+  public Transformation(String name) {
+    this.name = name;
     graph = new DefaultDirectedGraph<>( Hop.class );
   }
 
@@ -33,7 +39,14 @@ public class Transformation {
     return graph.outgoingEdgesOf( step );
   }
 
+  //<editor-fold desc="Getters & Setters">
+  public String getName() {
+    return name;
+  }
+
   public DirectedGraph<IStep,Hop> getGraph() {
     return graph;
   }
+  //</editor-fold>
+
 }
