@@ -9,9 +9,8 @@ import org.apache.spark.sql.Dataset;
 
 import javax.inject.Inject;
 
-import java.util.Arrays;
-
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 @Guice(modules = GuiceExampleModule.class)
 public class DataSetExamplesTest {
@@ -20,7 +19,7 @@ public class DataSetExamplesTest {
 
   @Test
   void creatDsTest() {
-    DataSetExamples dses = new DataSetExamples(sc);
+    DataSetExamples dses = new DataSetExamples( sc );
     Dataset<Row> ds = dses.createBaseDataSet( "/tmp/sales_data.csv" );
     // Check Headers
     String cols[] = ds.columns();
@@ -35,6 +34,33 @@ public class DataSetExamplesTest {
     assertEquals( Integer.valueOf( head.get( 1 ).toString( ) ),
       new Integer( 30 ) );
     assertEquals( Double.valueOf( head.get( 2 ).toString( ) ),
-      new Double( 95.7 ) );
+      new Double( 95.70 ) );
+  }
+
+  @Test
+  void sumByOrderNumberSqlUdfTest() {
+    DataSetExamples dses = new DataSetExamples( sc );
+    Dataset<Row> ds = dses.sumByOrderNumberSqlUdf();
+    ds.collect();
+    ds.show(10);
+    assertTrue( true );
+  }
+
+  @Test
+  void sumByOrderNumberSqlInlineTest() {
+    DataSetExamples dses = new DataSetExamples( sc );
+    Dataset<Row> ds = dses.sumByOrderNumberSqlInline();
+    ds.collect();
+    ds.show(10);
+    assertTrue( true );
+  }
+
+  @Test
+  void subByStaticClass() {
+    DataSetExamples dses = new DataSetExamples( sc );
+    Dataset<OrderNumberTotalsBean> ds = dses.sumByStaticClass( "/tmp/sales_data.csv" );
+    ds.collect();
+    ds.show(10);
+    assertTrue( true );
   }
 }

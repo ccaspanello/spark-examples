@@ -1,11 +1,15 @@
 package com.github.spark.etl;
 
 import org.apache.spark.SparkContext;
+import org.apache.spark.api.java.function.MapFunction;
+import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.types.DataTypes;
 
 import java.io.Serializable;
+
 
 public class DataSetExamples implements Serializable {
 
@@ -31,6 +35,53 @@ public class DataSetExamples implements Serializable {
       .option("inferSchema", true)
       .load(fileName);
     return result;
+  }
+
+  public Dataset<Row> sumByOrderNumberSqlUdf() {
+    this.ss.udf().register("calcLineItem", (Integer qty, Double price) -> qty * price, DataTypes.DoubleType);
+    Dataset<Row> orders = this.createBaseDataSet( "/tmp/sales_data.csv" );
+    return orders.selectExpr("ORDERNUMBER",
+                             "QUANTITYORDERED",
+                             "PRICEEACH",
+                             "calcLineItem(QUANTITYORDERED, PRICEEACH) as LINEITEMCOST" );
+  }
+
+  public Dataset<Row> sumByOrderNumberSqlInline() {
+    Dataset<Row> orders = this.createBaseDataSet( "/tmp/sales_data.csv" );
+    return orders.selectExpr("ORDERNUMBER",
+      "QUANTITYORDERED",
+      "PRICEEACH",
+      "QUANTITYORDERED * PRICEEACH as LINEITEMCOST" );
+  }
+/*
+  public Dataset<Row> sumByOrderNumberObj() {
+    Dataset<Row> orders = this.createBaseDataSet( "/tmp/sales_data.csv" );
+    orders.map( (Row r) -> { double tot = r.getInt( 1 ) + r.getDouble( 2 );  } );
+    return orders;
+  }
+*/
+  public Dataset<OrderNumberTotalsBean> sumByStaticClass(String fileName) {
+    Dataset<SalesDataBean> orders = this.ss.read()
+      .format("com.databricks.spark.csv")
+      .option("header", true)
+      .option("inferSchema", true)
+      .csv(fileName)
+      .as( Encoders.bean( SalesDataBean.class ) );
+      return orders.map(
+        ( (MapFunction<SalesDataBean, OrderNumberTotalsBean>) sdb -> {
+          OrderNumberTotalsBean ontb = new OrderNumberTotalsBean( );
+          ontb.setOrderNumber( sdb.getORDERNUMBER() );
+          ontb.setOrderLineNumber( sdb.getORDERLINENUMBER() );
+          ontb.setPriceEach( sdb.getPRICEEACH( ) );
+          ontb.setQuantityOrdered( sdb.getQUANTITYORDERED() );
+          ontb.setTotalCost( sdb.getQUANTITYORDERED() * sdb.getPRICEEACH() );
+          return ontb;
+        } ),
+          Encoders.bean( OrderNumberTotalsBean.class ) );
+  }
+
+  public Dataset<Row> sumByDynameClass() {
+    return null;
   }
 
 }
