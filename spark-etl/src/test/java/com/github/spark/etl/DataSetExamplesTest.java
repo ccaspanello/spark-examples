@@ -56,11 +56,31 @@ public class DataSetExamplesTest {
   }
 
   @Test
-  void subByStaticClass() {
+  void subByStaticClassTest() {
     DataSetExamples dses = new DataSetExamples( sc );
     Dataset<OrderNumberTotalsBean> ds = dses.sumByStaticClass( "./src/main/resources/SalesData.csv" );
     ds.collect();
     ds.show(10);
+    assertTrue( true );
+  }
+
+  @Test
+  void renameTwoColumnsTest() {
+    DataSetExamples dses = new DataSetExamples( sc );
+    Dataset<Row> ds = dses.createBaseDataSet( "./src/main/resources/SalesData.csv" );
+    Dataset<Row> renamedDs = dses.renameTwoColumns( ds );
+    renamedDs.collect();
+    renamedDs.show(10);
+    assertTrue( true );
+  }
+
+  @Test
+  void renameColumnsWithSelectTest() {
+    DataSetExamples dses = new DataSetExamples( sc );
+    Dataset<Row> ds = dses.createBaseDataSet( "./src/main/resources/SalesData.csv" );
+    Dataset<Row> renamedDs = dses.renameColumnsWithSelect( ds );
+    renamedDs.collect();
+    renamedDs.show(10);
     assertTrue( true );
   }
 }
