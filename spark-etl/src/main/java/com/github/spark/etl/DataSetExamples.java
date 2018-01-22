@@ -37,29 +37,23 @@ public class DataSetExamples implements Serializable {
     return result;
   }
 
-  public Dataset<Row> sumByOrderNumberSqlUdf() {
+  public Dataset<Row> sumByOrderNumberSqlUdf(String fileName) {
     this.ss.udf().register("calcLineItem", (Integer qty, Double price) -> qty * price, DataTypes.DoubleType);
-    Dataset<Row> orders = this.createBaseDataSet( "/tmp/sales_data.csv" );
+    Dataset<Row> orders = this.createBaseDataSet( fileName );
     return orders.selectExpr("ORDERNUMBER",
                              "QUANTITYORDERED",
                              "PRICEEACH",
                              "calcLineItem(QUANTITYORDERED, PRICEEACH) as LINEITEMCOST" );
   }
 
-  public Dataset<Row> sumByOrderNumberSqlInline() {
-    Dataset<Row> orders = this.createBaseDataSet( "/tmp/sales_data.csv" );
+  public Dataset<Row> sumByOrderNumberSqlInline(String fileName) {
+    Dataset<Row> orders = this.createBaseDataSet( fileName );
     return orders.selectExpr("ORDERNUMBER",
       "QUANTITYORDERED",
       "PRICEEACH",
       "QUANTITYORDERED * PRICEEACH as LINEITEMCOST" );
   }
-/*
-  public Dataset<Row> sumByOrderNumberObj() {
-    Dataset<Row> orders = this.createBaseDataSet( "/tmp/sales_data.csv" );
-    orders.map( (Row r) -> { double tot = r.getInt( 1 ) + r.getDouble( 2 );  } );
-    return orders;
-  }
-*/
+
   public Dataset<OrderNumberTotalsBean> sumByStaticClass(String fileName) {
     Dataset<SalesDataBean> orders = this.ss.read()
       .format("com.databricks.spark.csv")
@@ -78,10 +72,6 @@ public class DataSetExamples implements Serializable {
           return ontb;
         } ),
           Encoders.bean( OrderNumberTotalsBean.class ) );
-  }
-
-  public Dataset<Row> sumByDynameClass() {
-    return null;
   }
 
 }

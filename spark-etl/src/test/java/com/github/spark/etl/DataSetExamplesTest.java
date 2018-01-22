@@ -20,7 +20,7 @@ public class DataSetExamplesTest {
   @Test
   void creatDsTest() {
     DataSetExamples dses = new DataSetExamples( sc );
-    Dataset<Row> ds = dses.createBaseDataSet( "/tmp/sales_data.csv" );
+    Dataset<Row> ds = dses.createBaseDataSet( "./src/main/resources/SalesData.csv" );
     // Check Headers
     String cols[] = ds.columns();
     assertEquals( cols[0], "ORDERNUMBER" );
@@ -40,7 +40,7 @@ public class DataSetExamplesTest {
   @Test
   void sumByOrderNumberSqlUdfTest() {
     DataSetExamples dses = new DataSetExamples( sc );
-    Dataset<Row> ds = dses.sumByOrderNumberSqlUdf();
+    Dataset<Row> ds = dses.sumByOrderNumberSqlUdf("./src/main/resources/SalesData.csv");
     ds.collect();
     ds.show(10);
     assertTrue( true );
@@ -49,7 +49,7 @@ public class DataSetExamplesTest {
   @Test
   void sumByOrderNumberSqlInlineTest() {
     DataSetExamples dses = new DataSetExamples( sc );
-    Dataset<Row> ds = dses.sumByOrderNumberSqlInline();
+    Dataset<Row> ds = dses.sumByOrderNumberSqlInline("./src/main/resources/SalesData.csv");
     ds.collect();
     ds.show(10);
     assertTrue( true );
@@ -58,7 +58,7 @@ public class DataSetExamplesTest {
   @Test
   void subByStaticClass() {
     DataSetExamples dses = new DataSetExamples( sc );
-    Dataset<OrderNumberTotalsBean> ds = dses.sumByStaticClass( "/tmp/sales_data.csv" );
+    Dataset<OrderNumberTotalsBean> ds = dses.sumByStaticClass( "./src/main/resources/SalesData.csv" );
     ds.collect();
     ds.show(10);
     assertTrue( true );
