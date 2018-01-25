@@ -81,6 +81,26 @@ public class DataSetExamples implements Serializable {
           Encoders.bean( OrderNumberTotalsBean.class ) );
   }
 
+  public Dataset<OrderNumberTotalsBean> sumByStaticClassUsingExtendedBean(String fileName) {
+    Dataset<SalesDataExtendedBean> orders = this.ss.read()
+      .format("com.databricks.spark.csv")
+      .option("header", true)
+      .option("inferSchema", true)
+      .csv(fileName)
+      .as( Encoders.bean( SalesDataExtendedBean.class ) );
+    return orders.map(
+      ( (MapFunction<SalesDataExtendedBean, OrderNumberTotalsBean>) sdb -> {
+        OrderNumberTotalsBean ontb = new OrderNumberTotalsBean( );
+        ontb.setOrderNumber( sdb.getORDERNUMBER() );
+        ontb.setOrderLineNumber( sdb.getORDERLINENUMBER() );
+        ontb.setPriceEach( sdb.getPRICEEACH( ) );
+        ontb.setQuantityOrdered( sdb.getQUANTITYORDERED() );
+        ontb.setTotalCost( sdb.getQUANTITYORDERED() * sdb.getPRICEEACH() );
+        return ontb;
+      } ),
+      Encoders.bean( OrderNumberTotalsBean.class ) );
+  }
+
   public Dataset<Row> renameTwoColumns(Dataset<Row> salesData) {
     // Rename "STATUS" to  "new_status"
     // Rename "SALES" to  "new_sales"

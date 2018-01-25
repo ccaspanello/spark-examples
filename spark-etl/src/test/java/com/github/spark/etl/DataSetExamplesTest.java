@@ -2,6 +2,7 @@ package com.github.spark.etl;
 
 import org.apache.spark.SparkContext;
 import org.testng.annotations.Guice;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import org.apache.spark.sql.Row;
@@ -82,5 +83,16 @@ public class DataSetExamplesTest {
     renamedDs.collect();
     renamedDs.show(10);
     assertTrue( true );
+  }
+
+  //@Ignore
+  @Test
+  void sumByStaticClassUsingExtendedBeanTest() {
+    DataSetExamples dses = new DataSetExamples( sc );
+    Dataset<OrderNumberTotalsBean> ds = dses.sumByStaticClassUsingExtendedBean( "./src/main/resources/sales_data.csv" );
+    ds.collect();
+    ds.show(10);
+    assertTrue( true );
+
   }
 }
