@@ -85,7 +85,7 @@ public class DataSetExamplesTest {
     assertTrue( true );
   }
 
-  //@Ignore
+  @Ignore
   @Test
   void sumByStaticClassUsingExtendedBeanTest() {
     DataSetExamples dses = new DataSetExamples( sc );
