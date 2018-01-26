@@ -1,21 +1,29 @@
 package com.github.spark.etl;
 
 import org.apache.spark.SparkContext;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Encoders;
+import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.DataTypes;
 
+import org.apache.spark.sql.types.StructField;
+import org.apache.spark.sql.types.StructType;
 import scala.collection.Seq;
 import scala.collection.immutable.List;
 import scala.collection.immutable.List$;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 
 public class DataSetExamples implements Serializable {
@@ -51,6 +59,67 @@ public class DataSetExamples implements Serializable {
                              "QUANTITYORDERED",
                              "PRICEEACH",
                              "calcLineItem(QUANTITYORDERED, PRICEEACH) as LINEITEMCOST" );
+  }
+
+  public Dataset<Row> metaDataExample(String fileName) {
+    // This is not the most efficent way to do this but this captures most of the syntax we will need
+    // Mimics getting JavaRDD row
+    JavaRDD<String>  rawOrdersRDD = this.sc.textFile(fileName, 1).toJavaRDD();
+    // Nuke Header In real life use the csv tools from spark!!!
+    // By doing this we can apply the schema with out errors
+    JavaRDD ordersRDD = rawOrdersRDD.mapPartitionsWithIndex(
+      (Integer ind, Iterator<String> itr ) -> {
+        if ( ind == 0 ) {
+          if ( itr.hasNext() ) {
+            itr.next();
+            return itr;
+          } else {
+            return itr;
+          }
+        } else {
+          return itr;
+        }
+      },
+      false);
+
+    // Convete to JavaRDD Row
+    JavaRDD<Row> rowRDD = ordersRDD.map( (Function<String, Row>) rec -> {
+      String [] fields = rec.split(",");
+      return RowFactory.create( Integer.valueOf(fields[0]),
+                                Integer.valueOf(fields[1]),
+                                Double.valueOf(fields[2]),
+                                Integer.valueOf(fields[3]),
+                                Double.valueOf(fields[4]),
+                                fields[5] );
+    });
+
+    // Apply schema structure to the JavaRDD
+    java.util.List<StructField> fields = new ArrayList<>();
+    fields.add( DataTypes.createStructField( "ORDERNUMBER", DataTypes.IntegerType, false ));
+    fields.add( DataTypes.createStructField( "QUANTITYORDERED", DataTypes.IntegerType, false ));
+    fields.add( DataTypes.createStructField( "PRICEEACH", DataTypes.DoubleType, false ));
+    fields.add( DataTypes.createStructField( "ORDERLINENUMBER", DataTypes.IntegerType, false ));
+    fields.add( DataTypes.createStructField( "SALES", DataTypes.DoubleType, false ));
+    fields.add( DataTypes.createStructField( "STATUS", DataTypes.StringType, false ));
+    StructType schema = DataTypes.createStructType( fields );
+
+    Dataset<Row>  ordersDataFrame = this.ss.createDataFrame( rowRDD, schema );
+
+    // Create Tempary view to reference in the SQL
+    ordersDataFrame.createOrReplaceTempView("orders");
+
+    // Create Custom function
+    this.ss.udf().register("calcLineItem", (Integer qty, Double price) -> qty * price, DataTypes.DoubleType);
+
+    // Spark SQL Reverence Manual: https://docs.databricks.com/spark/latest/spark-sql/index.html
+    // Calculate total line Item cost
+    String stmt = "SELECT ORDERNUMBER, QUANTITYORDERED, PRICEEACH, ORDERLINENUMBER, SALES, STATUS,";
+    stmt += " calcLineItem(QUANTITYORDERED, PRICEEACH) as LINEITEMCOST";
+    stmt += " FROM orders";
+
+    // Sum LineItemCost by Status
+    return this.ss.sql(stmt).groupBy("STATUS").sum("LINEITEMCOST");
+
   }
 
   public Dataset<Row> sumByOrderNumberSqlInline(String fileName) {

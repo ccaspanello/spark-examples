@@ -85,6 +85,16 @@ public class DataSetExamplesTest {
     assertTrue( true );
   }
 
+  @Test
+  void metaDataExampleTest() {
+    DataSetExamples dses = new DataSetExamples( sc );
+    Dataset<Row> ds = dses.metaDataExample( "./src/main/resources/SalesData.csv" );
+    ds.collect();
+    ds.show(10);
+    assertTrue( true );
+
+  }
+
   @Ignore
   @Test
   void sumByStaticClassUsingExtendedBeanTest() {
